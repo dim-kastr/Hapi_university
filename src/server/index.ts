@@ -10,10 +10,9 @@ import * as HapiPulse from 'hapi-pulse';
 import * as Qs from 'qs';
 import routes from './routes';
 import config from './config/config';
-import {handleValidationError, responseHandler,} from './utils';
+import { handleValidationError, responseHandler, } from './utils';
 import SwaggerOptions from './config/swagger';
-import {pinoConfig,} from './config/pino';
-import {tokenValidate} from "./utils/auth";
+import { pinoConfig, } from './config/pino';
 
 const HapiSwagger = require('hapi-swagger');
 const Package = require('../../package.json');
@@ -48,8 +47,8 @@ const init = async () => {
         Inert,
         Vision,
         HapiBearer,
-        {plugin: Pino, options: pinoConfig(false),},
-        {plugin: HapiSwagger, options: SwaggerOptions,},
+        { plugin: Pino, options: pinoConfig(false), },
+        { plugin: HapiSwagger, options: SwaggerOptions, },
         {
             plugin: HapiPulse,
             options: {
@@ -62,15 +61,6 @@ const init = async () => {
             options: config.cors,
         }
     ]);
-
-    // JWT Auth
-    server.auth.strategy('jwt-access', 'bearer-access-token', {
-        validate: tokenValidate('access'),
-    });
-    server.auth.strategy('jwt-refresh', 'bearer-access-token', {
-        validate: tokenValidate('refresh'),
-    });
-    server.auth.default('jwt-access');
 
     // Загружаем маршруты
     server.route(routes);
@@ -88,4 +78,4 @@ const init = async () => {
     return server;
 };
 
-export {init,};
+export { init, };
