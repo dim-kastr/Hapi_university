@@ -1,49 +1,78 @@
-import { User, } from '../../models/User';
-import { UserAvatar, } from '../../models/UserAvatar';
-import { error, output, saveImage, } from '../../utils';
+import { Request } from '@hapi/hapi';
+import { User } from '../../models/User';
+import { Session } from '../../models/Session';
+import * as boom from '@hapi/boom';
+import { generateJwt } from '../../utils/auth';
 
-export async function getUser(r) {
-  return output({ firstName: 'John', });
+
+/**
+ * Verifying user authentication
+ * 
+ * @remarks
+ * log in to your account
+ * 
+ * @param {string} request - username and password
+ * 
+ * @returns - access and refresh jwt tokens
+ */
+export const userAuthentication = async (request: Request) => {
+
+  const {
+    email,
+    password
+  } = request.payload as any;
+
+  const user = await User.scope('withPassword').findOne({
+    where: {
+      email
+    }
+  });
+
+  if (!user) {
+    throw boom.notFound('User not found');
+  } // user search
+
+  if (!user.passwordCompare(password)) {
+    throw boom.badRequest('Password was entered incorrectly');
+  } // password verification
+
+  const sessionNew = await Session.newSession(user.id);
+  //creating a session 
+  const token = generateJwt(sessionNew);
+
+  return {
+    access: token.access
+  }
 }
 
-export const getAvatar = async (r) => {
-  try {
-    const user: User = await User.findByPk(r.auth.credentials.id, {
-      include: {
-        model: UserAvatar,
-        as: 'avatar',
-      },
-    });
-    const avatarAsBase64 = `data:image/png;base64${user.avatar.image.toString('base64')}`;
-    return output({ data: avatarAsBase64, userId: user.id, });
-  }
-  catch (err) {
-    console.log(err);
-    throw err;
-  }
-};
+/**
+ * User registration in the system 
+ * 
+ * @remarks
+ * Vetifycation of the user's existence in the system 
+ * Registering a new account 
+ * 
+ * @param {string} request - username and password
+ * 
+ * @returns {string} -  user greeting or login error
+ */
+export const userRegistration = async (request: Request) => {
 
-export const addAvatar = async (r) => {
-  try {
-    const user: User = r.auth.credentials;
+  const {
+    email,
+  } = request.payload as any;
 
-    // this is basic example code, you may do with received file whatever you want
-    const { avatarImage, } = r.payload;
-    const previousAvatar = await UserAvatar.findOne({ where: { userId: user.id, }, });
-    if (previousAvatar) {
-      await previousAvatar.destroy();
+  const userFound = await User.findOne({
+    where: {
+      email
     }
+  });
 
-    await saveImage(user.id, avatarImage);
+  if (!userFound) {
+    await User.createUser(request.payload);
 
-    return output({ message: 'Your avatar has been added!', });
+    return (`Hello my friend ${request.payload.username}`);
   }
-  catch (err) {
-    if (err.message == 'This file type is now allowed') {
-      return error(400000, 'This file type is now allowed', null);
-    }
 
-    console.log(err);
-    throw err;
-  }
-};
+  return boom.badRequest('User already exists')
+}

@@ -15,14 +15,31 @@ export function outputPaginationSchema(title: string, item: Joi.Schema): Joi.Sch
   });
 }
 
-const user = Joi.object({
-  name: Joi.string(),
-  email: Joi.string()
-    .email()
-    .required(),
-  password: Joi.string()
-    .min(6)
-    .required(),
-});
+const userValid =
+  Joi.object({
+    username: Joi.string().alphanum().min(6).max(8).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+    phone: Joi.string().min(12).max(12).required(),
+    dateOfBirth: Joi.date(),
+    sex: Joi.string().min(4).max(6).required(),
+  })
 
-export { user, };
+export { userValid };
+
+export interface userType {
+  username: string,
+  email: string,
+  password: string,
+  phone: string,
+  dateOfBirth: Date,
+  sex: string
+};
+
+export interface profileType {
+  userId: string,
+  faculty: string,
+  university: string,
+  group: string,
+  type: string
+}
