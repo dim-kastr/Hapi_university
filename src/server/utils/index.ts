@@ -3,7 +3,6 @@ import { Boom, } from '@hapi/boom';
 import * as FileType from 'file-type';
 import * as speakeasy from 'speakeasy';
 import config from '../config/config';
-import { UserAvatar, } from '../models/UserAvatar';
 
 interface IFileWithExt {
   data: Buffer;
@@ -54,7 +53,7 @@ export function responseHandler(r, h) {
     };
     if (r.app.error || (r.response.isBoom && r.response.data)) {
       const errorData = r.app.error ? r.app.error.data : r.response.data;
-      const {message} = r.app.error ? r.app.error.output.payload : r.response.output.payload;
+      const { message } = r.app.error ? r.app.error.output.payload : r.response.output.payload;
       if (r.response.data && r.response.data.custom) {
         r.response = h.response({
           ok: false,
@@ -67,7 +66,7 @@ export function responseHandler(r, h) {
       return h.continue;
     }
 
-    r.response.headers = {...r.response.headers, ...additionalHeaders};
+    r.response.headers = { ...r.response.headers, ...additionalHeaders };
     return h.continue;
   } catch (e) {
     console.log(e);
@@ -81,31 +80,3 @@ export async function handleValidationError(r, h, err) {
     err.details.map((e) => ({ field: e.context.key, reason: e.type.replace('any.', ''), }))
   );
 }
-
-export const getFileExt = async (file: Buffer): Promise<IFileWithExt> => {
-  if (!Buffer.isBuffer(file)) {
-    throw error(400000, 'This file type is now allowed', null);
-  }
-
-  const fileExt = await FileType.fromBuffer(file);
-  if (!fileExt || !fileExt.ext.match(config.files.allowedExtensions)) {
-    throw error(400000, 'This file type is now allowed', null);
-  }
-
-  return { data: file, fileExt: fileExt.ext, };
-};
-
-export const saveImage = async (userId: string, file: Buffer) => {
-  try {
-    const fileWithExt = await getFileExt(file);
-    console.log(fileWithExt.fileExt);
-    // await UserAvatar.create({
-    //   data: fileWithExt.data,
-    //   userId,
-    //   ext: fileWithExt.fileExt,
-    // });
-  }
-  catch (err) {
-    throw err;
-  }
-};
