@@ -76,3 +76,20 @@ export const userRegistration = async (request: Request) => {
 
   return boom.badRequest('User already exists')
 }
+
+
+
+export const createProlile = async (request: Request) => {
+
+
+  const { id } = request.auth.credentials;
+
+  const {
+    type,
+    university
+  } = request.payload as any;
+
+
+
+
+}

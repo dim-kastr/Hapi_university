@@ -23,7 +23,7 @@ export class Profile extends Model {
     @Column({ type: DataType.STRING, allowNull: false })
     university: string;
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING })
     group: string;
 
     @Column({ type: DataType.STRING, allowNull: false })
@@ -42,7 +42,5 @@ export class Profile extends Model {
             group: prof.group,
             type: prof.type
         })
-
     }
-
 }

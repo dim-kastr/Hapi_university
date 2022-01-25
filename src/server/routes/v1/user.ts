@@ -31,4 +31,15 @@ export default [
       auth: false
     }
   },
+  {
+    method: 'POST',
+    path: '/v1/user/profile',
+    handler: users.userRegistration,
+    options: {
+      validate: {
+        payload: valid.userValid
+      },
+      auth: 'jwt-access'
+    }
+  }
 ];
