@@ -25,7 +25,6 @@ const init = async () => {
         },
     });
     server.realm.modifiers.route.prefix = '/api';
-    // Регистрируем расширения
 
     // Error handler
     try {

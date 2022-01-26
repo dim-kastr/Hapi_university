@@ -26,5 +26,3 @@ export async function handleValidationError(r, h, err) {
     err.details.map((e) => ({ field: e.context.key, reason: e.type.replace('any.', ''), }))
   );
 }
-
-
