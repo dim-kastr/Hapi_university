@@ -1,9 +1,6 @@
-import {
-  Column, DataType, Model, Scopes, Table, HasOne,
-} from 'sequelize-typescript';
+import { Column, DataType, Model, Scopes, Table, HasOne, } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 import { getUUID, } from '../utils';
-import { UserAvatar, } from './UserAvatar';
 
 @Scopes(() => ({
   defaultScope: {
@@ -19,10 +16,8 @@ import { UserAvatar, } from './UserAvatar';
 }))
 @Table
 export class User extends Model {
-  @Column({ primaryKey: true, type: DataType.STRING, defaultValue: () => getUUID(), }) id: string;
-
-  @HasOne(() => UserAvatar)
-  avatar: UserAvatar;
+  @Column({ primaryKey: true, type: DataType.STRING, defaultValue: () => getUUID(), })
+  id: string;
 
   @Column({
     type: DataType.STRING,

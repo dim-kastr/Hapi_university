@@ -48,18 +48,7 @@ const init = async () => {
         Vision,
         HapiBearer,
         { plugin: Pino, options: pinoConfig(false), },
-        { plugin: HapiSwagger, options: SwaggerOptions, },
-        {
-            plugin: HapiPulse,
-            options: {
-                timeout: 15000,
-                signals: ['SIGINT'],
-            },
-        },
-        {
-            plugin: HapiCors,
-            options: config.cors,
-        }
+        { plugin: HapiSwagger, options: SwaggerOptions, }
     ]);
 
     // Загружаем маршруты
