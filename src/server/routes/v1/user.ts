@@ -2,11 +2,6 @@ import * as users from '../../api/v1/user';
 import * as valid from '../../schemes/index';
 
 
-/**
- * 
- * All user routes of version 1
- * 
- */
 export default [
     {
         method: 'POST',

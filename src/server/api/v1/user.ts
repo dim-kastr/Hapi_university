@@ -1,20 +1,10 @@
 import { Request } from '@hapi/hapi';
 import { User } from '../../models/User';
 import { Session } from '../../models/Session';
-import * as boom from '@hapi/boom';
 import { generateJwt } from '../../utils/auth';
+import { error, output } from '../../utils/index';
 
 
-/**
- * Verifying user authentication
- * 
- * @remarks
- * log in to your account
- * 
- * @param {string} request - username and password
- * 
- * @returns - access and refresh jwt tokens
- */
 export const userAuthentication = async (request: Request) => {
 
     const {
@@ -29,33 +19,22 @@ export const userAuthentication = async (request: Request) => {
     });
 
     if (!user) {
-        throw boom.notFound('User not found');
+        return error(404, 'User not found', {});
     } // user search
 
     if (!user.passwordCompare(password)) {
-        throw boom.badRequest('Password was entered incorrectly');
+        return error(400, 'Password was entered incorrectly', {});
     } // password verification
 
     const sessionNew = await Session.newSession(user.id);
     //creating a session 
-    const token = generateJwt(sessionNew);
+    const token = generateJwt(sessionNew.dataValues);
 
-    return {
+    return output({
         access: token.access
-    }
+    })
 }
 
-/**
- * User registration in the system 
- * 
- * @remarks
- * Vetifycation of the user's existence in the system 
- * Registering a new account 
- * 
- * @param {string} request - username and password
- * 
- * @returns {string} -  user greeting or login error
- */
 export const userRegistration = async (request: Request) => {
 
     const {
@@ -71,8 +50,11 @@ export const userRegistration = async (request: Request) => {
     if (!userFound) {
         await User.createUser(request.payload);
 
-        return (`Hello my friend ${request.payload.username}`);
+        return output({
+            username: request.payload.username
+        })
+
     }
 
-    return boom.badRequest('User already exists')
+    return error(400000, 'User not found', {})
 }

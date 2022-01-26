@@ -4,14 +4,8 @@ import { User } from './User';
 import { Session } from './Session';
 
 
-let hapiPro: Sequelize;
-/**
- * 
- * Connecting the database
- * 
- */
 export const dbInit = async () => {
-    const hapiPro = new Sequelize(config.dbLink, {
+    const sequelize = new Sequelize(config.dbLink, {
         dialect: 'postgres',
         models: [User, Session],
         define: {
@@ -19,7 +13,5 @@ export const dbInit = async () => {
         }
     });
 
-    await hapiPro.sync();
+    await sequelize.sync();
 }
-
-export default hapiPro;

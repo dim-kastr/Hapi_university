@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
 
-
 export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   ok: Joi.boolean().example(true),
   result: res,
@@ -17,13 +16,3 @@ const userValid =
   })
 
 export { userValid };
-
-
-export interface userType {
-  username: string,
-  email: string,
-  password: string,
-  phone: string,
-  dateOfBirth: Date,
-  sex: string
-};

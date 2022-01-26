@@ -1,6 +1,4 @@
-import user from './user';
+import auth from './user';
 
 
-export default [
-    ...user
-];
+export default [...auth];

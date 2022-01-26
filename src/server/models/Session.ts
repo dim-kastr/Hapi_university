@@ -3,11 +3,6 @@ import { getUUID } from '../utils';
 import { User } from './User';
 
 
-/**
- * 
- * Structure of the Session model table
- * /
- */
 @Table({
     timestamps: false,
     tableName: "Session"
@@ -19,16 +14,12 @@ export class Session extends Model {
 
     @ForeignKey(() => User)
     @Column(DataType.STRING)
-    idUser: string;
+    userId: string;
 
     @BelongsTo(() => User)
     user: User;
 
-    static newSession = async function (idUser: string) {
-
-        const id = getUUID();
-        const session = await this.create({ id, idUser });
-
-        return session.dataValues;
+    static newSession = async function (userId: string) {
+        return await this.create({ userId });
     }// creating new session
 }

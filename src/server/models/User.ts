@@ -1,15 +1,9 @@
 import { Column, DataType, Model, Scopes, Table, HasMany } from 'sequelize-typescript';
 import * as bcrypt from 'bcrypt';
 import { getUUID, } from '../utils';
-import { userType } from '../schemes/index';
 import { Session } from './Session';
 
 
-/**
- * 
- * Structure of the User model table
- * 
- */
 @Scopes(() => ({
     defaultScope: {
         attributes: {
@@ -68,11 +62,10 @@ export class User extends Model {
         return bcrypt.compareSync(pwd, this.password);
     }
 
-    static createUser = async function (user: userType) {
+    static createUser = async function (user: User) {
 
-        const id = getUUID();
         await this.create({
-            id: id,
+            id: user.id,
             username: user.username,
             email: user.email,
             password: user.password,
