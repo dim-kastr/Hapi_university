@@ -11,6 +11,8 @@ import config from './config/config';
 import { handleValidationError, responseHandler, } from './utils';
 import SwaggerOptions from './config/swagger';
 import { pinoConfig, } from './config/pino';
+import { dbInit } from './models';
+import { tokenValidate } from './utils/auth';
 
 const HapiSwagger = require('hapi-swagger');
 const Package = require('../../package.json');
@@ -48,6 +50,15 @@ const init = async () => {
         { plugin: Pino, options: pinoConfig(false), },
         { plugin: HapiSwagger, options: SwaggerOptions, }
     ]);
+
+    // JWT Auth
+    server.auth.strategy('jwt-access', 'bearer-access-token', {
+        validate: tokenValidate('access'),
+    });
+
+    server.auth.default('jwt-access');
+
+    await dbInit();
 
     // Загружаем маршруты
     server.route(routes);
