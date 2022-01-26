@@ -17,7 +17,7 @@ export class Session extends Model {
 
   @ForeignKey(() => User)
   @Column(DataType.STRING)
-  idUser: string;
+  userId: string;
 
   @BelongsTo(() => User)
   user: User;
