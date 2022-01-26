@@ -51,6 +51,7 @@ const init = async () => {
         { plugin: HapiSwagger, options: SwaggerOptions, }
     ]);
 
+
     // Загружаем маршруты
     server.route(routes);
     // Error handler
