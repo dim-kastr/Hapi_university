@@ -8,15 +8,19 @@ export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
 
 const email = Joi.string().email().required();
 const password = Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required();
+const username = Joi.string().alphanum().min(6).max(8);
+const phone = Joi.string().pattern(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/).required();
+const dateOfBirth = Joi.date().raw().required();
+const sex = Joi.string().valid('male', 'female').required();
 
 const userValidRegistr =
   Joi.object({
-    username: Joi.string().alphanum().min(6).max(8).required(),
+    username: username.required(),
     email,
     password,
-    phone: Joi.string().pattern(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/).required(),
-    dateOfBirth: Joi.date().raw(),
-    sex: Joi.string().valid('male', 'female').required(),
+    phone,
+    dateOfBirth,
+    sex
   })
 
 const userValidAuth =
@@ -32,8 +36,22 @@ const profileValid =
     group: Joi.string().optional()
   })
 
+const userValidChange =
+  Joi.object({
+    username: username.optional(),
+    password,
+    phone,
+    dateOfBirth,
+    sex
+  })
 
-export { userValidRegistr, userValidAuth, profileValid }
+
+export {
+  userValidRegistr,
+  userValidAuth,
+  profileValid,
+  userValidChange
+}
 
 
 export interface profileType {

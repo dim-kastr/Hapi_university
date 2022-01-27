@@ -3,7 +3,6 @@ import { getUUID } from '../utils';
 import { User } from './User';
 import { University } from './University';
 import { profileType } from '../schemes';
-import { group } from 'console';
 
 
 @Table({

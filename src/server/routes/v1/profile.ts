@@ -1,18 +1,18 @@
-import * as users from '../../api/v1/user';
+import * as profile from '../../api/v1/profile';
 import * as valid from '../../schemes/index';
 
 
 export default [
     {
         method: 'POST',
-        path: '/v1/user/change',
-        handler: users.changeUser,
+        path: '/v1/profile/create',
+        handler: profile.createProfile,
         options: {
             auth: {
                 strategy: 'jwt-access'
             },
             validate: {
-                payload: valid.userValidChange
+                payload: valid.profileValid
             }
         }
     },

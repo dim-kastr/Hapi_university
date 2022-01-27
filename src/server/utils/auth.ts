@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
 import { error, } from './index';
-import { User, } from '../models/User';
 import { Session, } from '../models/Session';
 import { Errors, } from './errors';
 
