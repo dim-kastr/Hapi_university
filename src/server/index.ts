@@ -6,6 +6,7 @@ import * as HapiBearer from 'hapi-auth-bearer-token';
 import routes from './routes';
 import { tokenValidate } from "./utils/auth";
 import { dbInit } from './models';
+import { createUnivers } from './utils';
 
 
 const init = async () => {
@@ -41,6 +42,8 @@ const init = async () => {
     server.auth.default('jwt-access');
 
     await dbInit();
+
+    await createUnivers();
     // Загружаем маршруты
     server.route(routes);
     // Error handler

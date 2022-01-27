@@ -3,6 +3,12 @@ import { User } from '../../models/User';
 import { Session } from '../../models/Session';
 import { generateJwt } from '../../utils/auth';
 import { error, output } from '../../utils/index';
+import { University } from '../../models/University';
+import { Errors } from '../../utils/errors'
+import { Profile } from '../../models/Profile';
+import { group } from 'console';
+import { failedDependency } from '@hapi/boom';
+import { ok } from 'assert';
 
 
 export const userAuthentication = async (request: Request) => {
@@ -19,11 +25,11 @@ export const userAuthentication = async (request: Request) => {
     });
 
     if (!user) {
-        return error(404, 'User not found', {});
+        return error(Errors.NotFound, 'User not found', {});
     } // user search
 
     if (!user.passwordCompare(password)) {
-        return error(400, 'Password was entered incorrectly', {});
+        return error(Errors.InvalidPayload, 'Password was entered incorrectly', {});
     } // password verification
 
     const sessionNew = await Session.newSession(user.id);
@@ -56,5 +62,43 @@ export const userRegistration = async (request: Request) => {
 
     }
 
-    return error(400000, 'User not found', {})
+    return error(Errors.NotFound, 'User not found', {})
+}
+
+
+export const createProlile = async (request: Request) => {
+
+    const { name, faculty, group } = request.payload;
+
+    const universityFound = await University.findOne({
+        where: {
+            name
+        }
+    })
+
+    if (!universityFound) {
+        return error(Errors.NotFound, 'University not found', {})
+    }
+
+    const profileFound = await Profile.findOne({
+        where: {
+            userId: request.auth.credentional.id,
+            uneversityId: universityFound.id
+        }
+    })
+
+    if (!profileFound) {
+        await Profile.createProfile({
+            userId: request.auth.credentional.id,
+            faculty: faculty,
+            university: name,
+            group: group,
+            type: group ? 'Student' : 'Teacher',
+            universId: universityFound.id
+        });
+
+        return output()
+    }
+
+    return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})
 }
