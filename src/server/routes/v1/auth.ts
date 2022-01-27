@@ -1,12 +1,12 @@
-import * as users from '../../api/v1/user';
+import * as auth from '../../api/v1/auth';
 import * as valid from '../../schemes/index';
 
 
 export default [
     {
         method: 'POST',
-        path: '/v1/user/authentication',
-        handler: users.userAuthentication,
+        path: '/v1/authentication',
+        handler: auth.userAuthentication,
         options: {
             validate: {
                 payload: valid.userValidAuth
@@ -16,8 +16,8 @@ export default [
     },
     {
         method: 'POST',
-        path: '/v1/user/registration',
-        handler: users.userRegistration,
+        path: '/v1/registration',
+        handler: auth.userRegistration,
         options: {
             validate: {
                 payload: valid.userValidRegistr

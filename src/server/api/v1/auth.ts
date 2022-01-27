@@ -12,7 +12,7 @@ export const userAuthentication = async (request: Request) => {
     const {
         email,
         password
-    } = request.payload as any;
+    } = request.payload;
 
     const user = await User.scope('withPassword').findOne({
         where: {
@@ -41,7 +41,7 @@ export const userRegistration = async (request: Request) => {
 
     const {
         email,
-    } = request.payload as any;
+    } = request.payload;
 
     const userFound = await User.findOne({
         where: {
