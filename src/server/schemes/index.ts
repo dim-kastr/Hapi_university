@@ -5,7 +5,7 @@ export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   result: res,
 });
 
-const userValid =
+const userValidRegistr =
   Joi.object({
     username: Joi.string().alphanum().min(6).max(8).required(),
     email: Joi.string().email().required(),
@@ -15,6 +15,12 @@ const userValid =
     sex: Joi.string().valid('male', 'female').required(),
   })
 
+const userValidAuth =
+  Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required(),
+  })
+
 const profileValid =
   Joi.object({
     faculty: Joi.string().required(),
@@ -22,7 +28,9 @@ const profileValid =
     group: Joi.string()
   })
 
-export { userValid, profileValid };
+
+export { userValidRegistr, userValidAuth, profileValid }
+
 
 export interface profileType {
   userId: string,

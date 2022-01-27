@@ -9,7 +9,7 @@ export default [
         handler: users.userAuthentication,
         options: {
             validate: {
-                payload: valid.userValid
+                payload: valid.userValidAuth
             },
             auth: false
         }
@@ -20,7 +20,7 @@ export default [
         handler: users.userRegistration,
         options: {
             validate: {
-                payload: valid.userValid
+                payload: valid.userValidRegistr
             },
             auth: false
         }
