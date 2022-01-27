@@ -30,10 +30,7 @@ export class Profile extends Model {
 
     @Column({
         type: DataType.STRING,
-        allowNull: false,
-        defaultValue: (group: string) => {
-            return group ? 'Student' : 'Teacher'
-        }
+        allowNull: false
     })
     type: string;
 
@@ -49,6 +46,6 @@ export class Profile extends Model {
 
     static createProfile = async function (prof: profileType) {
 
-        await this.create(prof)
+        return await this.create(prof)
     }
 }

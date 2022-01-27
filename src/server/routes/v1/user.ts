@@ -5,7 +5,7 @@ import * as valid from '../../schemes/index';
 export default [
     {
         method: 'POST',
-        path: '/v1/user/authentication',
+        path: '/v1/authentication',
         handler: users.userAuthentication,
         options: {
             validate: {
@@ -16,7 +16,7 @@ export default [
     },
     {
         method: 'POST',
-        path: '/v1/user/registration',
+        path: '/v1/registration',
         handler: users.userRegistration,
         options: {
             validate: {
@@ -27,7 +27,7 @@ export default [
     },
     {
         method: 'POST',
-        path: '/v1/user/profile/create',
+        path: '/v1/profile/create',
         handler: users.createProlile,
         options: {
             auth: {

@@ -5,9 +5,13 @@ import { User, } from '../models/User';
 import { Session, } from '../models/Session';
 import { Errors, } from './errors';
 
+interface IGenerateJWT {
+    id: string,
+    userId: string
+}
 
-export const generateJwt = (data: object) => {
-    const access = jwt.sign({ data }, config.auth.jwt.access.secret, { expiresIn: config.auth.jwt.access.lifetime, });
+export const generateJwt = (data: IGenerateJWT) => {
+    const access = jwt.sign({ id: data.id, userId: data.userId }, config.auth.jwt.access.secret, { expiresIn: config.auth.jwt.access.lifetime, });
     return { access };
 };
 
@@ -29,7 +33,7 @@ export function tokenValidate(tokenType: 'access' | 'refresh'): validateFunc {
         const data = await decodeJwt(token, config.auth.jwt[tokenType].secret);
 
         const { user } = await Session.findByPk(data.id, {
-            include: [{ model: User, }],
+            include: ['user'],
         });
 
         if (user) {
@@ -37,5 +41,6 @@ export function tokenValidate(tokenType: 'access' | 'refresh'): validateFunc {
         }
 
         throw error(Errors.SessionNotFound, 'User not found', {});
+
     };
 }

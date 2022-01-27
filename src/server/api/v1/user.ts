@@ -63,37 +63,46 @@ export const userRegistration = async (request: Request) => {
 }
 
 export const createProlile = async (request: Request) => {
+    const { university, faculty, group } = request.payload;
 
-    const { name, faculty, group } = request.payload;
+    const user: User = request.auth.credentials;
+
+    console.log("🚀 ~ file: user.ts ~ line 70 ~ createProlile ~ user", user)
 
     const universityFound = await University.findOne({
         where: {
-            name
+            name: university
         }
     })
+    console.log("🚀 ~ file: user.ts ~ line 77 ~ createProlile ~ universityFound", universityFound)
 
     if (!universityFound) {
         return error(Errors.NotFound, 'University not found', {})
     }
 
-    const profileFound = await Profile.findOne({
-        where: {
-            userId: request.auth.credentional.id,
-            uneversityId: universityFound.id
+    try {
+
+        const profileFound = await Profile.findOne({
+            where: {
+                userId: user.id,
+                universId: universityFound.id
+            }
+        })
+        console.log("🚀 ~ file: user.ts ~ line 89 ~ createProlile ~ profileFound", profileFound)
+
+        if (!profileFound) {
+            const createProf = await Profile.createProfile({
+                userId: user.id,
+                faculty: faculty,
+                university,
+                group,
+                type: group ? 'Student' : 'Teacher',
+                universId: universityFound.id
+            });
+
+            return output(createProf)
         }
-    })
 
-    if (!profileFound) {
-        await Profile.createProfile({
-            userId: request.auth.credentials.id,
-            faculty: faculty,
-            university: name,
-            group: group,
-            universId: universityFound.id
-        });
-
-        return output()
-    }
-
-    return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})
+        return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})
+    } catch (e) { console.log(e) };
 }

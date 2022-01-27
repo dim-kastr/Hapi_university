@@ -1,15 +1,19 @@
 import * as Joi from 'joi';
+import { UniversityType } from '../utils/univ';
 
 export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   ok: Joi.boolean().example(true),
   result: res,
 });
 
+const email = Joi.string().email().required();
+const password = Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required();
+
 const userValidRegistr =
   Joi.object({
     username: Joi.string().alphanum().min(6).max(8).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required(),
+    email,
+    password,
     phone: Joi.string().pattern(/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/).required(),
     dateOfBirth: Joi.date().raw(),
     sex: Joi.string().valid('male', 'female').required(),
@@ -17,15 +21,15 @@ const userValidRegistr =
 
 const userValidAuth =
   Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/).required(),
+    email,
+    password,
   })
 
 const profileValid =
   Joi.object({
     faculty: Joi.string().required(),
-    university: Joi.string().valid('TPU', 'TGU', 'TUSUR', 'TGPU').required(),
-    group: Joi.string()
+    university: Joi.string().valid(...Object.values(UniversityType)).required(),
+    group: Joi.string().optional()
   })
 
 
@@ -37,5 +41,6 @@ export interface profileType {
   faculty: string,
   university: string,
   group: string,
-  universId: string
+  universId: string,
+  type?: string
 }

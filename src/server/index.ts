@@ -1,11 +1,12 @@
 import * as Hapi from '@hapi/hapi';
 import * as Qs from 'qs';
 import config from './config/config';
-import { createUnivers, handleValidationError } from './utils';
+import { handleValidationError } from './utils';
 import * as HapiBearer from 'hapi-auth-bearer-token';
 import routes from './routes';
 import { tokenValidate } from "./utils/auth";
 import { dbInit } from './models';
+import { University } from './models/University';
 
 
 const init = async () => {
@@ -40,7 +41,7 @@ const init = async () => {
 
     await dbInit();
 
-    createUnivers();
+    await University.createUniversity();
 
     server.route(routes);
 
