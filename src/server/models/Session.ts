@@ -20,6 +20,10 @@ export class Session extends Model {
     user: User;
 
     static newSession = async function (userId: string) {
+
+        const viviviv = await this.create({ userId });
+        console.log("🚀 ~ file: Session.ts ~ line 25 ~ Session ~ viviviv", viviviv)
+
         return await this.create({ userId });
     }// creating new session
 }

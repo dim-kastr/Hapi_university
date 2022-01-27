@@ -1,6 +1,5 @@
 import * as Joi from 'joi';
-import { StringLiteralLike } from 'typescript';
-import { User } from '../models/User';
+
 
 export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   ok: Joi.boolean().example(true),
@@ -17,20 +16,5 @@ const userValid =
     sex: Joi.string().valid('male', 'female').required(),
   })
 
-const profileValid =
-  Joi.object({
-    faculty: Joi.string().required(),
-    university: Joi.string().valid('TPU', 'TGU', 'TUSUR', 'TGPU').required(),
-    group: Joi.string()
-  })
+export { userValid };
 
-export { userValid, profileValid };
-
-export interface profileType {
-  userId: string,
-  faculty: string,
-  university: string,
-  group: string,
-  type: string,
-  universId: string
-}

@@ -2,7 +2,6 @@ import { Column, DataType, Model, Scopes, Table, HasMany } from 'sequelize-types
 import * as bcrypt from 'bcrypt';
 import { getUUID, } from '../utils';
 import { Session } from './Session';
-import { Profile } from './Profile';
 
 
 @Scopes(() => ({
@@ -58,24 +57,12 @@ export class User extends Model {
     @HasMany(() => Session)
     sessions: Session[];
 
-    @HasMany(() => Profile)
-    profile: Profile[];
-
 
     passwordCompare(pwd: string) {
         return bcrypt.compareSync(pwd, this.password);
     }
 
     static createUser = async function (user: User) {
-
-        await this.create({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            phone: user.phone,
-            dateOfBirth: user.dateOfBirth,
-            sex: user.sex
-        })
+        await this.create(user)
     }
 }

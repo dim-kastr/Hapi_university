@@ -1,6 +1,5 @@
 import { Boom, } from '@hapi/boom';
 import { v4 as uuidv4, } from 'uuid';
-import { University } from '../models/University';
 
 
 export function getUUID(): string {
@@ -31,15 +30,4 @@ export async function handleValidationError(r, h, err) {
     'Validation error',
     err.details.map((e) => ({ field: e.context.key, reason: e.type.replace('any.', ''), }))
   );
-}
-
-export async function createUnivers() {
-
-  await University.createUniversity('TPU'),
-
-    await University.createUniversity('TGU'),
-
-    await University.createUniversity('TUSUR')
-
-  await University.createUniversity('TGPU')
 }
