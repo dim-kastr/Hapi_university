@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi';
 import * as Qs from 'qs';
 import config from './config/config';
-import { handleValidationError } from './utils';
+import { createUnivers, handleValidationError } from './utils';
 import * as HapiBearer from 'hapi-auth-bearer-token';
 import routes from './routes';
 import { tokenValidate } from "./utils/auth";
@@ -39,6 +39,8 @@ const init = async () => {
     server.auth.default('jwt-access');
 
     await dbInit();
+
+    createUnivers();
 
     server.route(routes);
 

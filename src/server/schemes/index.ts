@@ -15,4 +15,19 @@ const userValid =
     sex: Joi.string().valid('male', 'female').required(),
   })
 
-export { userValid };
+const profileValid =
+  Joi.object({
+    faculty: Joi.string().required(),
+    university: Joi.string().valid('TPU', 'TGU', 'TUSUR', 'TGPU').required(),
+    group: Joi.string()
+  })
+
+export { userValid, profileValid };
+
+export interface profileType {
+  userId: string,
+  faculty: string,
+  university: string,
+  group: string,
+  universId: string
+}

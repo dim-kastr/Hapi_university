@@ -4,6 +4,8 @@ import { Session } from '../../models/Session';
 import { generateJwt } from '../../utils/auth';
 import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
+import { University } from '../../models/University';
+import { Profile } from '../../models/Profile';
 
 
 
@@ -58,4 +60,40 @@ export const userRegistration = async (request: Request) => {
     }
 
     return error(Errors.InvalidPayload, 'User already exists', {})
+}
+
+export const createProlile = async (request: Request) => {
+
+    const { name, faculty, group } = request.payload;
+
+    const universityFound = await University.findOne({
+        where: {
+            name
+        }
+    })
+
+    if (!universityFound) {
+        return error(Errors.NotFound, 'University not found', {})
+    }
+
+    const profileFound = await Profile.findOne({
+        where: {
+            userId: request.auth.credentional.id,
+            uneversityId: universityFound.id
+        }
+    })
+
+    if (!profileFound) {
+        await Profile.createProfile({
+            userId: request.auth.credentials.id,
+            faculty: faculty,
+            university: name,
+            group: group,
+            universId: universityFound.id
+        });
+
+        return output()
+    }
+
+    return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})
 }

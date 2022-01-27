@@ -25,4 +25,17 @@ export default [
             auth: false
         }
     },
+    {
+        method: 'POST',
+        path: '/v1/user/profile/create',
+        handler: users.createProlile,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            },
+            validate: {
+                payload: valid.profileValid
+            }
+        }
+    }
 ];
