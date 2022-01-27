@@ -29,7 +29,6 @@ export const userAuthentication = async (request: Request) => {
     }
 
     const sessionNew = await Session.newSession(user.id);
-    console.log("🚀 ~ file: user.ts ~ line 32 ~ userAuthentication ~ sessionNew", sessionNew)
 
     const token = generateJwt(sessionNew.dataValues);
 
