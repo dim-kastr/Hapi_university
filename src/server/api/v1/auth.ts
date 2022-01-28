@@ -41,6 +41,7 @@ export const userRegistration = async (request: Request) => {
 
     const {
         email,
+        username
     } = request.payload;
 
     const userFound = await User.findOne({
@@ -53,7 +54,7 @@ export const userRegistration = async (request: Request) => {
         await User.createUser(request.payload);
 
         return output({
-            username: request.payload.username
+            username
         })
     }
 
