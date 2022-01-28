@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { UniversityType } from '../utils/univ';
+import { UniversityType } from '../utils/university';
 
 export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   ok: Joi.boolean().example(true),
