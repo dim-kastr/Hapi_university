@@ -1,8 +1,5 @@
 import { Boom, } from '@hapi/boom';
 import { v4 as uuidv4, } from 'uuid';
-import { University } from '../models/University';
-import { userValidAuth } from '../schemes';
-import { UniversityType } from './univ';
 
 
 export function getUUID(): string {

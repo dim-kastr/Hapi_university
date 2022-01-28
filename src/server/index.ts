@@ -7,6 +7,8 @@ import routes from './routes';
 import { tokenValidate } from "./utils/auth";
 import { dbInit } from './models';
 import { University } from './models/University';
+import * as Pino from 'hapi-pino';
+import { pinoConfig, } from './config/pino';
 
 
 const init = async () => {
@@ -31,6 +33,7 @@ const init = async () => {
     server.realm.modifiers.route.prefix = '/api';
     await server.register([
         HapiBearer,
+        { plugin: Pino, options: pinoConfig(false), },
     ]);
 
     server.auth.strategy('jwt-access', 'bearer-access-token', {

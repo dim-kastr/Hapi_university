@@ -1,4 +1,4 @@
-import * as users from '../../api/v1/user';
+import * as users from '../../api/v1/auth';
 import * as valid from '../../schemes/index';
 
 
@@ -25,17 +25,4 @@ export default [
             auth: false
         }
     },
-    {
-        method: 'POST',
-        path: '/v1/profile/create',
-        handler: users.createProlile,
-        options: {
-            auth: {
-                strategy: 'jwt-access'
-            },
-            validate: {
-                payload: valid.profileValid
-            }
-        }
-    }
 ];
