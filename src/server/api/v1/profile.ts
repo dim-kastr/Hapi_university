@@ -4,6 +4,7 @@ import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
 import { University } from '../../models/University';
 import { Profile } from '../../models/Profile';
+import { group } from 'console';
 
 
 export const createProfile = async (request: Request) => {
@@ -43,5 +44,17 @@ export const createProfile = async (request: Request) => {
     }
 
     return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})
+
+}
+
+export const profileChange = async (request: Request) => {
+
+    const user = request.auth.credentials;
+
+    const { faculty, university, group } = request.payload;
+
+    const
+
+
 
 }

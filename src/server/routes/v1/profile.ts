@@ -16,4 +16,17 @@ export default [
             }
         }
     },
+    {
+        method: 'POST',
+        path: '/v1/profile/change',
+        handler: profile.createProfile,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            },
+            validate: {
+                payload: valid.profileValidChange
+            }
+        }
+    },
 ];
