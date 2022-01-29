@@ -1,7 +1,7 @@
 import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
 import { getUUID } from '../utils';
 import { Profile } from './Profile';
-import { UniversityType } from '../utils/univ';
+import { UniversityType } from '../utils/university';
 
 
 @Table({

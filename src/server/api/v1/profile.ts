@@ -21,7 +21,6 @@ export const createProfile = async (request: Request) => {
         return error(Errors.NotFound, 'University not found', {})
     }
 
-
     const profileFound = await Profile.findOne({
         where: {
             userId: user.id,

@@ -26,7 +26,6 @@ export const decodeJwt = async (token: string, secret: string) => {
 
 export type validateFunc = (r, token: string) => Promise<any>;
 
-// Fabric which returns token validate function depending on token type
 export function tokenValidate(tokenType: 'access' | 'refresh'): validateFunc {
     return async function (r, token: string) {
         const data = await decodeJwt(token, config.auth.jwt[tokenType].secret);
