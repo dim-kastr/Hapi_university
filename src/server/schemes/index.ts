@@ -65,7 +65,7 @@ export {
 }
 
 
-export interface profileType {
+export interface IProfileType {
   userId: string,
   faculty: string,
   university: string,

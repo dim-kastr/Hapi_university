@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from '
 import { getUUID } from '../utils';
 import { User } from './User';
 import { University } from './University';
-import { profileType } from '../schemes';
+import { IProfileType } from '../schemes';
 
 
 @Table({
@@ -43,7 +43,7 @@ export class Profile extends Model {
     @BelongsTo(() => University)
     univers: University;
 
-    static createProfile = async function (prof: profileType) {
+    static createProfile = async function (prof: IProfileType) {
 
         return await this.create(prof)
     }

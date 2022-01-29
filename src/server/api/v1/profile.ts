@@ -4,7 +4,6 @@ import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
 import { University } from '../../models/University';
 import { Profile } from '../../models/Profile';
-import { group } from 'console';
 
 
 export const createProfile = async (request: Request) => {
@@ -51,10 +50,34 @@ export const profileChange = async (request: Request) => {
 
     const user = request.auth.credentials;
 
-    const { faculty, university, group } = request.payload;
+    const { university } = request.payload;
 
-    const
+    const id = request.params.id;
 
+    const profileFound = await Profile.findOne({
+        where: {
+            id
+        }
+    })
 
+    if (!profileFound) {
+        return error(Errors.NotFound, "Profile not found", {})
+    }
+
+    const checkingTeacher = await Profile.findOne({
+        where: {
+            userId: user.id,
+            university,
+            type: "Teacher",
+        }
+    })
+
+    if (!checkingTeacher) {
+        return error(Errors.NotFound, "You are not a teacher", {})
+    }
+
+    profileFound.update(request.payload);
+
+    return output(profileFound)
 
 }
