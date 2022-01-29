@@ -15,6 +15,8 @@ const sex = Joi.string().valid('male', 'female');
 const faculty = Joi.string();
 const university = Joi.string().valid(...Object.values(UniversityType));
 const group = Joi.string().optional();
+const grade = Joi.string().pattern(/^[1-5]$/);
+const lesson = Joi.string();
 
 const userValidRegistr =
   Joi.object({
@@ -55,13 +57,20 @@ const profileValidChange =
     group: group.optional()
   })
 
+const gradesValid =
+  Joi.object({
+    grade: grade.required(),
+    lesson: lesson.required()
+  })
+
 
 export {
   userValidRegistr,
   userValidAuth,
   profileValid,
   userValidChange,
-  profileValidChange
+  profileValidChange,
+  gradesValid
 }
 
 
@@ -72,4 +81,11 @@ export interface IProfileType {
   group: string,
   universId: string,
   type?: string
+}
+
+export interface IGradesType {
+  studentId: string,
+  teacherId: string,
+  grade: number,
+  lesson: string
 }

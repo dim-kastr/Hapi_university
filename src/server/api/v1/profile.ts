@@ -7,8 +7,8 @@ import { Profile } from '../../models/Profile';
 
 
 export const createProfile = async (request: Request) => {
-    const { university, faculty, group } = request.payload;
 
+    const { university, faculty, group } = request.payload;
     const user: User = request.auth.credentials;
 
     const universityFound = await University.findOne({
@@ -20,7 +20,6 @@ export const createProfile = async (request: Request) => {
     if (!universityFound) {
         return error(Errors.NotFound, 'University not found', {})
     }
-
 
     const profileFound = await Profile.findOne({
         where: {
@@ -35,7 +34,7 @@ export const createProfile = async (request: Request) => {
             faculty: faculty,
             university,
             group,
-            type: group ? 'Student' : 'Teacher',
+            type: group ? 'student' : 'teacher',
             universId: universityFound.id
         });
 
@@ -49,9 +48,7 @@ export const createProfile = async (request: Request) => {
 export const profileChange = async (request: Request) => {
 
     const user = request.auth.credentials;
-
     const { university } = request.payload;
-
     const id = request.params.id;
 
     const profileFound = await Profile.findOne({
@@ -68,7 +65,7 @@ export const profileChange = async (request: Request) => {
         where: {
             userId: user.id,
             university,
-            type: "Teacher",
+            type: "teacher",
         }
     })
 

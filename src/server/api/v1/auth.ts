@@ -6,6 +6,30 @@ import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
 
 
+export const userRegistration = async (request: Request) => {
+
+    const {
+        email,
+        username
+    } = request.payload as any;
+
+    const userFound = await User.findOne({
+        where: {
+            email
+        }
+    });
+
+    if (!userFound) {
+        await User.createUser(request.payload);
+
+        return output({
+            username
+        })
+    }
+
+    return error(Errors.InvalidPayload, 'User already exists', {})
+}
+
 export const userAuthentication = async (request: Request) => {
 
     const {
@@ -35,28 +59,3 @@ export const userAuthentication = async (request: Request) => {
         access: token.access
     })
 }
-
-export const userRegistration = async (request: Request) => {
-
-    const {
-        email,
-        username
-    } = request.payload as any;
-
-    const userFound = await User.findOne({
-        where: {
-            email
-        }
-    });
-
-    if (!userFound) {
-        await User.createUser(request.payload);
-
-        return output({
-            username
-        })
-    }
-
-    return error(Errors.InvalidPayload, 'User already exists', {})
-}
-

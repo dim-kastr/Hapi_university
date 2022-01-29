@@ -3,6 +3,7 @@ import { getUUID } from '../utils';
 import { User } from './User';
 import { University } from './University';
 import { IProfileType } from '../schemes';
+import { Grades } from './Grades';
 
 
 @Table({
@@ -42,6 +43,9 @@ export class Profile extends Model {
 
     @BelongsTo(() => University)
     univers: University;
+
+    @HasMany(() => Grades)
+    grades: Grades[];
 
     static createProfile = async function (prof: IProfileType) {
 
