@@ -16,4 +16,17 @@ export default [
             }
         }
     },
+    {
+        method: 'POST',
+        path: '/v1/user/profile/grade/{id}/change',
+        handler: users.changeGrade,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            },
+            validate: {
+                payload: valid.gradesValidChange
+            }
+        }
+    },
 ];

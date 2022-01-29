@@ -43,5 +43,34 @@ export const createGrade = async (request: Request) => {
         grade,
         lesson
     })
+}
+
+export const changeGrade = async (request: Request) => {
+
+    const user: User = request.auth.credentials;
+    const gradeId = request.params.id;
+
+    const teacherFound = await Profile.findOne({
+        where: {
+            userId: user.id
+        }
+    })
+
+    const grades = await Grades.findOne({
+        where: {
+            id: gradeId,
+            teacherId: teacherFound.id
+        }
+    })
+
+    if (!grades) {
+        return error(Errors.NotFound, "You can't change the grade", {})
+    }
+
+    grades.update(request.payload)
+
+    return output({
+        message: `Score successfully changed to ${grades.grade}`
+    })
 
 }

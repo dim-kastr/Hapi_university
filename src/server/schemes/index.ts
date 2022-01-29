@@ -1,5 +1,5 @@
 import * as Joi from 'joi';
-import { UniversityType } from '../utils/univ';
+import { UniversityType } from '../utils/university';
 
 export const outputOkSchema = (res: Joi.Schema): Joi.Schema => Joi.object({
   ok: Joi.boolean().example(true),
@@ -14,7 +14,7 @@ const dateOfBirth = Joi.date().raw();
 const sex = Joi.string().valid('male', 'female');
 const faculty = Joi.string();
 const university = Joi.string().valid(...Object.values(UniversityType));
-const group = Joi.string().optional();
+const group = Joi.string();
 const grade = Joi.string().pattern(/^[1-5]$/);
 const lesson = Joi.string();
 
@@ -63,6 +63,11 @@ const gradesValid =
     lesson: lesson.required()
   })
 
+const gradesValidChange =
+  Joi.object({
+    grade: grade.optional()
+  })
+
 
 export {
   userValidRegistr,
@@ -70,7 +75,8 @@ export {
   profileValid,
   userValidChange,
   profileValidChange,
-  gradesValid
+  gradesValid,
+  gradesValidChange
 }
 
 
