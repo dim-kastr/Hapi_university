@@ -4,6 +4,7 @@ import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
 import { Profile } from '../../models/Profile';
 import { Grades } from '../../models/Grades';
+import { Sequelize, Op } from 'sequelize';
 
 
 
@@ -72,5 +73,52 @@ export const changeGrade = async (request: Request) => {
     return output({
         message: `Score successfully changed to ${grades.grade}`
     })
-
 }
+
+export const avgGradeByStudent = async (request: Request) => {
+
+    const user: User = request.auth.credentials;
+    const studentId = request.params.id;
+
+    const student = await Profile.findOne({
+        where: {
+            id: studentId
+        }
+    })
+
+    if (!student) {
+        return error(Errors.NotFound, "Profile not found", {})
+    }
+
+    const checkingTeacher = await Profile.findOne({
+        where: {
+            userId: user.id,
+            type: "teacher",
+            faculty: student.faculty,
+            university: student.university
+        }
+    })
+
+    if (!checkingTeacher) {
+        return error(Errors.NotFound, "Access is restricted", {})
+    }
+
+    const grade = await Grades.findAll({
+        where: {
+            [Op.or]: [{
+                studentId
+            },
+            {
+                teacherId: checkingTeacher.id
+            }
+            ]
+        },
+        attributes: [[Sequelize.fn('AVG', Sequelize.col('grade')), 'average_rating']]
+    })
+
+    return output(grade)
+}
+
+
+
+

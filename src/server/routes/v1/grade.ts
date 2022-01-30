@@ -29,4 +29,14 @@ export default [
             }
         }
     },
+    {
+        method: 'GET',
+        path: '/v1/user/profile/{id}/grade/avg',
+        handler: users.avgGradeByStudent,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            }
+        }
+    },
 ];
