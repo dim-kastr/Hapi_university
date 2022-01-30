@@ -5,6 +5,7 @@ import { Errors } from '../../utils/errors'
 import { Profile } from '../../models/Profile';
 import { Grades } from '../../models/Grades';
 import { Sequelize, Op } from 'sequelize';
+import { University } from '../../models/University';
 
 
 
@@ -113,12 +114,40 @@ export const avgGradeByStudent = async (request: Request) => {
             }
             ]
         },
-        attributes: [[Sequelize.fn('AVG', Sequelize.col('grade')), 'average_rating']]
+        attributes: [[Sequelize.fn('AVG', Sequelize.col('grade')), 'average_rating_student']]
     })
 
     return output(grade)
 }
 
+export const avgGradeByFaculty = async (request: Request) => {
+
+    const user: User = request.auth.credentials;
+    const faculty = request.params.faculty;
+    const university = request.params.university;
+
+    const profileFound = await Profile.findOne({
+        where: {
+            userId: user.id,
+            type: "teacher",
+            faculty,
+            university
+        }
+    })
+
+    if (!profileFound) {
+        return error(Errors.NotFound, 'Profile not found', {})
+    }
+
+    const grade = await Grades.findAll({
+        where: {
+            teacherId: profileFound.id
+        },
+        attributes: [[Sequelize.fn('AVG', Sequelize.col('grade')), 'average_rating_faculty']]
+    })
+
+    return output(grade)
+}
 
 
 
