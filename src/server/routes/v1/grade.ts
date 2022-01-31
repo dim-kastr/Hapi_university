@@ -49,4 +49,14 @@ export default [
             }
         }
     },
+    {
+        method: 'GET',
+        path: '/v1/user/profile/{university}/{faculty}/{group}/grade/avg',
+        handler: users.avgGradeByGroup,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            }
+        }
+    },
 ];

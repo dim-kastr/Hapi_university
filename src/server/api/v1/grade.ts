@@ -5,7 +5,6 @@ import { Errors } from '../../utils/errors'
 import { Profile } from '../../models/Profile';
 import { Grades } from '../../models/Grades';
 import { Sequelize, Op } from 'sequelize';
-import { University } from '../../models/University';
 
 
 
@@ -147,6 +146,56 @@ export const avgGradeByFaculty = async (request: Request) => {
     })
 
     return output(grade)
+}
+
+export const avgGradeByGroup = async (request: Request) => {
+
+    const user: User = request.auth.credentials;
+    const faculty = request.params.faculty;
+    const university = request.params.university;
+    const group = request.params.group;
+
+    const foundTeacher = await Profile.findOne({
+        where: {
+            userId: user.id,
+            type: "teacher",
+            faculty,
+            university
+        }
+    })
+
+    if (!foundTeacher) {
+        return error(Errors.NotFound, 'Profile not found', {})
+    }
+
+    const studentProfiles = await Profile.findAll({
+        where: {
+            type: "student",
+            faculty,
+            university,
+            group
+        },
+        include: {
+            model: Grades,
+            where: {
+                teacherId: foundTeacher.id
+            }
+        }
+    })
+
+    let sum = 0;
+    let length = 0;
+
+    studentProfiles.forEach(profile => {
+        profile.grades.forEach(grade => (
+            sum += grade.grade,
+            length++
+        ))
+    })
+
+    let avgGroup = sum / length;
+
+    return output({ avgGroup: avgGroup })
 }
 
 

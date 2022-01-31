@@ -13,6 +13,7 @@ export class Grades extends Model {
     @Column({ primaryKey: true, type: DataType.STRING, defaultValue: () => getUUID(), })
     id: string;
 
+    @ForeignKey(() => Profile)
     @Column({ type: DataType.STRING, allowNull: false })
     studentId: string;
 
