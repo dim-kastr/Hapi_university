@@ -41,7 +41,7 @@ export default [
     },
     {
         method: 'GET',
-        path: '/v1/user/profile/{university}/{faculty}/grade/avg',
+        path: '/v1/user/profile/university/{university}/faculty/{faculty}/grade/avg',
         handler: users.avgGradeByFaculty,
         options: {
             auth: {
@@ -51,8 +51,18 @@ export default [
     },
     {
         method: 'GET',
-        path: '/v1/user/profile/{university}/{faculty}/{group}/grade/avg',
+        path: '/v1/user/profile/university/{university}/faculty/{faculty}/group/{group}/grade/avg',
         handler: users.avgGradeByGroup,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            }
+        }
+    },
+    {
+        method: 'GET',
+        path: '/v1/user/profile/{id}/lesson/{lesson}/grade/avg',
+        handler: users.avgGradeByLesson,
         options: {
             auth: {
                 strategy: 'jwt-access'

@@ -5,6 +5,7 @@ import { Errors } from '../../utils/errors'
 import { Profile } from '../../models/Profile';
 import { Grades } from '../../models/Grades';
 import { Sequelize, Op } from 'sequelize';
+import user from '../../routes/v1/user';
 
 
 
@@ -198,5 +199,36 @@ export const avgGradeByGroup = async (request: Request) => {
     return output({ avgGroup: avgGroup })
 }
 
+export const avgGradeByLesson = async (request: Request) => {
 
+    const studentId = request.params.id;
+    const lesson = request.params.lesson;
+    const user: User = request.auth.credentials;
+    const gtgtgt = user.id;
 
+    const checkingStudent = await Profile.findOne({
+        where: {
+            userId: user.id,
+            type: "student",
+            id: studentId
+        }
+    })
+
+    if (!checkingStudent) {
+        return error(Errors.NotFound, 'Profile not found', {})
+    }
+
+    const grade = await Grades.findAll({
+        where: {
+            studentId: studentId,
+            lesson
+        },
+        attributes: [[Sequelize.fn('AVG', Sequelize.col('grade')), 'average_rating_faculty']]
+    })
+
+    if (!grade) {
+        return error(Errors.NotFound, 'Lesson or grade not found', {})
+    }
+
+    return output(grade)
+}
