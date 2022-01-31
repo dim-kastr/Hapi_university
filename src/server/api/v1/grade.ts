@@ -204,7 +204,6 @@ export const avgGradeByLesson = async (request: Request) => {
     const studentId = request.params.id;
     const lesson = request.params.lesson;
     const user: User = request.auth.credentials;
-    const gtgtgt = user.id;
 
     const checkingStudent = await Profile.findOne({
         where: {
