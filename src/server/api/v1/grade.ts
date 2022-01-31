@@ -204,7 +204,6 @@ export const avgGradeByLesson = async (request: Request) => {
     const studentId = request.params.id;
     const lesson = request.params.lesson;
     const user: User = request.auth.credentials;
-    const gtgtgt = user.id;
 
     const checkingStudent = await Profile.findOne({
         where: {
@@ -228,6 +227,40 @@ export const avgGradeByLesson = async (request: Request) => {
 
     if (!grade) {
         return error(Errors.NotFound, 'Lesson or grade not found', {})
+    }
+
+    return output(grade)
+}
+
+
+export const listGradeByLesson = async (request: Request) => {
+
+    const studentId = request.params.id;
+    const lesson = request.params.lesson;
+    const user: User = request.auth.credentials;
+
+    const checkingStudent = await Profile.findOne({
+        where: {
+            userId: user.id,
+            type: "student",
+            id: studentId
+        }
+    })
+
+    if (!checkingStudent) {
+        return error(Errors.NotFound, 'Profile not found', {})
+    }
+
+    const grade = await Grades.findAll({
+        where: {
+            studentId: studentId,
+            lesson
+        },
+        attributes: ['grade']
+    })
+
+    if (!grade) {
+        return error(Errors.NotFound, 'You have no grades for this lesson', {})
     }
 
     return output(grade)

@@ -69,4 +69,14 @@ export default [
             }
         }
     },
+    {
+        method: 'GET',
+        path: '/v1/user/profile/{id}/lesson/{lesson}/list/grade',
+        handler: users.listGradeByLesson,
+        options: {
+            auth: {
+                strategy: 'jwt-access'
+            }
+        }
+    },
 ];
