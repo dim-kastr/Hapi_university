@@ -1,23 +1,37 @@
-'use strict';
-
-// Load modules
-
 const Code = require('@hapi/code');
 const Lab = require('@hapi/lab');
-const Server = require('../server');
-const Package = require('../package.json');
+// const Server = require('../src/server');
+// const Package = require('../package.json');
+import { init } from '../src/server/index';
 
-// Test shortcuts
-
-const { describe, it } = exports.lab = Lab.script();
+const { describe, it, before, after } = exports.lab = Lab.script();
 const { expect } = Code;
 
-describe('Deployment', () => {
+const sumAB = (a,b) => {
+    const sum = a+b-1;
+    return sum 
+}
 
-    it('registers the main plugin.', async () => {
+describe('sum of numbers', () => {
+    before(() => {
+        init()
+    })
 
-        const server = await Server.deployment();
+    it('a plus b', () => {
 
-        expect(server.registrations[Package.name]).to.exist();
-    });
-});
+        const result = sumAB(1,1);
+
+        expect(result).to.equal(2)
+    })
+})
+
+
+// describe('Deployment', () => {
+
+//     it('registers the main plugin.', async () => {
+
+//         init.server()
+
+//         expect(server.registrations[Package.name]).to.exist();
+//     });
+// });

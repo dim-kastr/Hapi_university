@@ -6,7 +6,7 @@ import { University } from '../../models/University';
 import { Profile } from '../../models/Profile';
 
 
-export const createProfile = async (request: Request) => {
+export const createProfile = async (request: Request, res) => {
 
     const { university, faculty, group } = request.payload;
     const user: User = request.auth.credentials;
@@ -16,10 +16,6 @@ export const createProfile = async (request: Request) => {
             name: university
         }
     })
-
-    if (!universityFound) {
-        return error(Errors.NotFound, 'University not found', {})
-    }
 
     const profileFound = await Profile.findOne({
         where: {
@@ -38,7 +34,7 @@ export const createProfile = async (request: Request) => {
             universId: universityFound.id
         });
 
-        return output(createProf)
+        return res.response(output(createProf)).code(201)
     }
 
     return error(Errors.InvalidPayload, 'The data is entered incorrectly', {})

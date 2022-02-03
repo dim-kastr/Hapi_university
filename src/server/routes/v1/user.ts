@@ -4,7 +4,7 @@ import * as valid from '../../schemes/index';
 
 export default [
     {
-        method: 'POST',
+        method: 'PUT',
         path: '/v1/user/change',
         handler: users.changeUser,
         options: {

@@ -17,7 +17,7 @@ export default [
         }
     },
     {
-        method: 'POST',
+        method: 'PUT',
         path: '/v1/user/profile/grade/{id}/change',
         handler: users.changeGrade,
         options: {

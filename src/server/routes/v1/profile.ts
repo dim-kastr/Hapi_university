@@ -17,8 +17,8 @@ export default [
         }
     },
     {
-        method: 'POST',
-        path: '/v1/user/profile/change/{id}',
+        method: 'PUT',
+        path: '/v1/user/profile/{id}/change',
         handler: profile.profileChange,
         options: {
             auth: {

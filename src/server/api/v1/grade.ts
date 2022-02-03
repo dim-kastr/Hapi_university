@@ -5,11 +5,9 @@ import { Errors } from '../../utils/errors'
 import { Profile } from '../../models/Profile';
 import { Grades } from '../../models/Grades';
 import { Sequelize, Op } from 'sequelize';
-import user from '../../routes/v1/user';
 
 
-
-export const createGrade = async (request: Request) => {
+export const createGrade = async (request: Request, res) => {
 
     const user: User = request.auth.credentials;
     const { grade, lesson } = request.payload;
@@ -41,10 +39,10 @@ export const createGrade = async (request: Request) => {
         lesson,
     })
 
-    return output({
+    return res.response(output({
         grade,
         lesson
-    })
+    })).code(201)
 }
 
 export const changeGrade = async (request: Request) => {
@@ -231,7 +229,6 @@ export const avgGradeByLesson = async (request: Request) => {
 
     return output(grade)
 }
-
 
 export const listGradeByLesson = async (request: Request) => {
 

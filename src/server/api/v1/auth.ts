@@ -6,7 +6,7 @@ import { error, output } from '../../utils/index';
 import { Errors } from '../../utils/errors'
 
 
-export const userRegistration = async (request: Request) => {
+export const userRegistration = async (request: Request, res) => {
 
     const {
         email,
@@ -22,15 +22,15 @@ export const userRegistration = async (request: Request) => {
     if (!userFound) {
         await User.createUser(request.payload);
 
-        return output({
+        return res.response(output({
             username
-        })
+        })).code(201)
     }
 
     return error(Errors.InvalidPayload, 'User already exists', {})
 }
 
-export const userAuthentication = async (request: Request) => {
+export const userAuthentication = async (request: Request, res) => {
 
     const {
         email,
@@ -55,7 +55,7 @@ export const userAuthentication = async (request: Request) => {
 
     const token = generateJwt(sessionNew);
 
-    return output({
+    return res.response(output({
         access: token.access
-    })
+    })).code(201)
 }
